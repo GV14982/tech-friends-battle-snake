@@ -1,6 +1,9 @@
 // API Types
 // https://docs.battlesnake.com/api
 
+/**
+ *  @description An object containing cartesian coordinates 
+ * */
 export interface Coord {
   x: number;
   y: number;
@@ -25,10 +28,17 @@ export interface Customizations {
 }
 
 export interface Board {
+  /**
+   *  @description The number of rows in the y-axis of the game board
+   *  @example 11
+   * */
   height: number;
   width: number;
   food: Coord[];
   hazards: Coord[];
+  /**
+   *  @description List of all Battlesnakes currently on the board (Including you if you haven't been eliminated) 
+   * */
   snakes: Battlesnake[];
 }
 
@@ -72,6 +82,15 @@ export interface InfoResponse {
 }
 
 export interface MoveResponse {
-  move: string;
+  move: Move;
   shout?: string;
 }
+
+export enum Move {
+  Up = "up",
+  Down = "down",
+  Left = "left",
+  Right = "right"
+}
+
+export type SnakePositionMap = Record<string, Record<string, boolean>>;
