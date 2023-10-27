@@ -10,8 +10,10 @@
 // To get you started we've included code to prevent your Battlesnake from moving backwards.
 // For more info see docs.battlesnake.com
 
+import { checkOpponents } from './opponents';
 import runServer from './server';
-import { GameState, InfoResponse, MoveResponse } from './types';
+import { GameState, InfoResponse, MoveResponse, Move, Coord, Battlesnake, SnakePositionMap } from './types';
+import { parseCoord } from './utils';
 
 // info is called when you create your Battlesnake on play.battlesnake.com
 // and controls your Battlesnake's appearance
@@ -43,11 +45,11 @@ function end(gameState: GameState): void {
 // See https://docs.battlesnake.com/api/example-move for available data
 function move(gameState: GameState): MoveResponse {
 
-  let isMoveSafe: { [key: string]: boolean; } = {
-    up: true,
-    down: true,
-    left: true,
-    right: true
+  let isMoveSafe: Record<Move, boolean> = {
+    [Move.Up]: true,
+    [Move.Down]: true,
+    [Move.Left]: true,
+    [Move.Right]: true
   };
 
   // We've included code to prevent your Battlesnake from moving backwards
@@ -67,6 +69,18 @@ function move(gameState: GameState): MoveResponse {
     isMoveSafe.up = false;
   }
 
+  // Map of snakes to map of coords as strings in the form `x-y` to booleans
+  const oppMap = gameState.board.snakes.filter(s => s.id != gameState.you.id).reduce<SnakePositionMap>((acc, curr) => {
+    if (!acc[curr.id]) {
+      acc[curr.id] = {}
+    }
+    curr.body.forEach(segment => {
+      acc[curr.id][parseCoord(segment)] = true
+    })
+    return acc;
+  }, {})
+
+
   // TODO: Step 1 - Prevent your Battlesnake from moving out of bounds
   // boardWidth = gameState.board.width;
   // boardHeight = gameState.board.height;
@@ -75,17 +89,19 @@ function move(gameState: GameState): MoveResponse {
   // myBody = gameState.you.body;
 
   // TODO: Step 3 - Prevent your Battlesnake from colliding with other Battlesnakes
-  // opponents = gameState.board.snakes;
+  // FIXME: THIS NAME SUCKS ASS -love Graham, ps I wrote it
+  isMoveSafe = checkOpponents(gameState.you, oppMap, isMoveSafe) 
 
   // Are there any safe moves left?
-  const safeMoves = Object.keys(isMoveSafe).filter(key => isMoveSafe[key]);
+  // FIXME: I suppose we should sanity check this, but I'll 
+  const safeMoves = Object.keys(isMoveSafe).filter(key => isMoveSafe[key as Move]);
   if (safeMoves.length == 0) {
     console.log(`MOVE ${gameState.turn}: No safe moves detected! Moving down`);
-    return { move: "down" };
+    return { move: Move.Down };
   }
 
   // Choose a random move from the safe moves
-  const nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)];
+  const nextMove = safeMoves[Math.floor(Math.random() * safeMoves.length)] as Move;
 
   // TODO: Step 4 - Move towards food instead of random, to regain health and survive longer
   // food = gameState.board.food;
