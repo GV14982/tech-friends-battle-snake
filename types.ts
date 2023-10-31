@@ -14,11 +14,11 @@ export interface Battlesnake {
   name: string;
   health: number;
   /**
-   *  @description Array of coordinates representing this Battlesnake's location on the game board. This array is ordered from head to tail
+   *  @description Array of {@link Coord} representing this Battlesnake's location on the game board. This array is ordered from head to tail
    * */
   body: Coord[];
   /**
-   *  @description Coordinates for this Battlesnake's head. Equivalent to the first element of the body array
+   *  @description {@link Coord} for this Battlesnake's head. Equivalent to the first element of the body array
    *  @example {"x": 0, "y": 0}
    * */
   head: Coord;
