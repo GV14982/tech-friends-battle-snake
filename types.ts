@@ -69,7 +69,7 @@ export interface Ruleset {
    * */
   version: string;
   /**
-   *  @description A collection of specific settings {@link RulesetSettings} being used by the current game that control how the rules are applied.
+   *  @description A collection of {@link RulesetSettings specific settings} being used by the current game that control how the rules are applied.
    * */
   settings: RulesetSettings;
 }
