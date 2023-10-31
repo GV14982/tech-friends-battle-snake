@@ -22,8 +22,18 @@ export interface Battlesnake {
 }
 
 export interface Customizations {
+  /**
+   *  @description Hex color code used to display this Battlesnake
+   *  @example #888888
+   * */
   color: string;
+  /**
+   *  @description Displayed head of this Battlesnake
+   * */
   head: string;
+  /**
+   *  @description Displayed tail of this Battlesnake
+   * */
   tail: string;
 }
 
