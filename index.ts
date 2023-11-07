@@ -10,9 +10,10 @@
 // To get you started we've included code to prevent your Battlesnake from moving backwards.
 // For more info see docs.battlesnake.com
 
+import { checkBound } from './checkBounds';
 import { checkOpponents } from './opponents';
 import runServer from './server';
-import { GameState, InfoResponse, MoveResponse, Move, Coord, Battlesnake, SnakePositionMap } from './types';
+import { GameState, InfoResponse, MoveResponse, Move, Coord, Battlesnake, SnakePositionMap, Board } from './types';
 import { parseCoord } from './utils';
 
 // info is called when you create your Battlesnake on play.battlesnake.com
@@ -80,20 +81,19 @@ function move(gameState: GameState): MoveResponse {
     return acc;
   }, {})
 
+  
 
-  // TODO: Step 1 - Prevent your Battlesnake from moving out of bounds
-  // boardWidth = gameState.board.width;
-  // boardHeight = gameState.board.height;
+  isMoveSafe = checkBound(gameState.you.head, gameState.board, isMoveSafe);
 
   // TODO: Step 2 - Prevent your Battlesnake from colliding with itself
   // myBody = gameState.you.body;
 
   // TODO: Step 3 - Prevent your Battlesnake from colliding with other Battlesnakes
   // FIXME: THIS NAME SUCKS ASS -love Graham, ps I wrote it
-  isMoveSafe = checkOpponents(gameState.you, oppMap, isMoveSafe) 
+  isMoveSafe = checkOpponents(gameState.you, oppMap, isMoveSafe)
 
   // Are there any safe moves left?
-  // FIXME: I suppose we should sanity check this, but I'll 
+  // FIXME: I suppose we should sanity check this, but I'll (Idk where I was going here...)
   const safeMoves = Object.keys(isMoveSafe).filter(key => isMoveSafe[key as Move]);
   if (safeMoves.length == 0) {
     console.log(`MOVE ${gameState.turn}: No safe moves detected! Moving down`);
