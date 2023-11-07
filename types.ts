@@ -75,8 +75,19 @@ export interface Game {
 }
 
 export interface Ruleset {
+  /**
+   *  @description Name of the ruleset being used to run this game. Possible values include: standard, solo, royale, squad, constrictor, wrapped. See {@link https://docs.battlesnake.com/guides/playing/modes Game Modes} for more information on each ruleset
+   *  @example "standard"
+   * */
   name: string;
+  /**
+   *  @description The release version of the {@link https://github.com/BattlesnakeOfficial/rules Rules} module used in this game
+   *  @example "version": "v1.2.3"
+   * */
   version: string;
+  /**
+   *  @description A collection of {@link RulesetSettings specific settings} being used by the current game that control how the rules are applied.
+   * */
   settings: RulesetSettings;
 }
 
